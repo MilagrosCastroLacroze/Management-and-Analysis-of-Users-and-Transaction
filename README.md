@@ -4,84 +4,25 @@ from sqlalchemy import create_engine, Column, Integer, String, Float, Date, Meta
 from sqlalchemy.orm import declarative_base, sessionmaker
 import pandas as pd
 
-# SQLAlchemy CONFIGURATION
+# Description 
 
-engine = create_engine('sqlite:///tienda.db')
-Base = declarative_base()
-metadata = MetaData()
+The goal of this project is to import, clean and analyze a data set stored in an SQLite database. Use SQLAlchemy to interact with the database, pandas for data manipulation and matplotlib for displaying results.
 
-#Define the models
-class Usuario(Base):
-    __tablename__ = 'usuarios'
-    id = Column(Integer, primary_key=True)
-    nombre = Column(String)
-    correo = Column(String)
-    fecha_registro = Column(Date)
+# Content
+Define the models
+Drop the exists tables and them create a news tables 
+Creat a sesion 
+Load data from CSV and prepare dates with date_format
+Change date to object datetime.date
+Query data using pandas y SQLAlchemy
+Group by user and sum transaction amounts
+Join DataFrame with users to get names
+Find the user with the highest total transaction amount
+Graph the total amount of transactions per user
 
-class Transaccion(Base):
-    __tablename__ = 'transacciones'
-    id = Column(Integer, primary_key=True)
-    usuario_id = Column(Integer)
-    monto = Column(Float)
-    fecha = Column(Date)
+# Installations 
 
-# Drop the exists tables and them create a news tables 
-Base.metadata.drop_all(engine)  # Drop tables
-Base.metadata.create_all(engine)  # Create new tables
+pip install sqlalchemy
+pip install pandas
+pip install matplotlib
 
-# Creat a sesion 
-Session = sessionmaker(bind=engine)
-session = Session()
-
-#QUERY AND ANALYZE DATA
-
-# Load data from CSV and prepare dates with date_format
-usuarios_df = pd.read_csv('usuarios.csv', parse_dates=['fecha_registro'], date_format='%m/%d/%Y')
-transacciones_df = pd.read_csv('transacciones.csv', parse_dates=['fecha'], date_format='%m/%d/%Y')
-
-# Change date to object datetime.date
-usuarios_df['fecha_registro'] = usuarios_df['fecha_registro'].dt.date
-transacciones_df['fecha'] = transacciones_df['fecha'].dt.date
-
-# Save data on data bases 
-usuarios_df.to_sql('usuarios', engine, if_exists='append', index=False)
-transacciones_df.to_sql('transacciones', engine, if_exists='append', index=False)
-
-
-# Query data using pandas y SQLAlchemy
-usuarios = pd.read_sql('usuarios', engine)
-transacciones = pd.read_sql('transacciones', engine)
-
-print("Usuarios:")
-print(usuarios)
-print("\nTransacciones:")
-print(transacciones)
-
-
-# Group by user and sum transaction amounts
-transacciones_por_usuario = transacciones.groupby('usuario_id')['monto'].sum().reset_index()
-
-# Join DataFrame with users to get names
-result = pd.merge(transacciones_por_usuario, usuarios, left_on='usuario_id', right_on='id')
-result = result[['nombre', 'monto']]
-print("\nTotal de transacciones por usuario:")
-print(result)
-
-
-#Find the user with the highest total transaction amount
-usuario_top = result.loc[result['monto'].idxmax()]
-print("\nUsuario con mayor monto total de transacciones:")
-print(usuario_top)
-
-
-#DATA VISUALIZATION
-
-import matplotlib.pyplot as plt
-
-# Graph the total amount of transactions per user
-plt.figure(figsize=(10,6))
-plt.bar(result['nombre'], result['monto'], color='skyblue')
-plt.title('Monto Total de Transacciones por Usuario')
-plt.xlabel('Usuario')
-plt.ylabel('Monto Total')
-plt.show()
