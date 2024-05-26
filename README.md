@@ -1,10 +1,10 @@
 # Management-and-Analysis-of-Users-and-Transaction
 
-# Description 
+## Description 
 
 The goal of this project is to import, clean and analyze a data set stored in an SQLite database. Use SQLAlchemy to interact with the database, pandas for data manipulation and matplotlib for displaying results.
 
-# Content
+## Content
 Define the models.
 
 Drop the exists tables and them create a news tables.
@@ -25,7 +25,7 @@ Find the user with the highest total transaction amount.
 
 Graph the total amount of transactions per user.
 
-# Installations 
+## Installations 
 
 pip install sqlalchemy
 
