@@ -5,7 +5,8 @@
 The goal of this project is to import, clean and analyze a data set stored in an SQLite database. Use SQLAlchemy to interact with the database, pandas for data manipulation and matplotlib for displaying results.
 
 # Content
-Define the models
+Define the models.
+
 Drop the exists tables and them create a news tables 
 Creat a sesion 
 Load data from CSV and prepare dates with date_format
