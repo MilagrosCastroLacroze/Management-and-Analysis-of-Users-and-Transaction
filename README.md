@@ -1,9 +1,5 @@
 # Management-and-Analysis-of-Users-and-Transaction
 
-from sqlalchemy import create_engine, Column, Integer, String, Float, Date, MetaData
-from sqlalchemy.orm import declarative_base, sessionmaker
-import pandas as pd
-
 # Description 
 
 The goal of this project is to import, clean and analyze a data set stored in an SQLite database. Use SQLAlchemy to interact with the database, pandas for data manipulation and matplotlib for displaying results.
